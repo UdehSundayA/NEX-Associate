@@ -1,0 +1,317 @@
+/* ==========================================================================
+   NEXUS LEARNING — Shared App Theme (nexus-theme.css)
+   Used by: login.html, signup.html, dashboard.html
+   Token values mirror landing-page/styles.css for brand consistency.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Core Colors */
+  --nl-navy-dark:     #070F1E;
+  --nl-navy:          #0B1F3A;
+  --nl-navy-light:    #132A4B;
+  --nl-navy-card:     #0F2442;
+  --nl-navy-border:   rgba(255, 255, 255, 0.1);
+
+  /* Brand Accents */
+  --nl-cyan:          #0EA5E9;
+  --nl-cyan-glow:     rgba(14, 165, 233, 0.35);
+  --nl-teal:          #14B8A6;
+  --nl-gold:          #F59E0B;
+  --nl-gold-light:    #FBBF24;
+  --nl-gold-glow:     rgba(245, 158, 11, 0.35);
+  --nl-purple:        #8B5CF6;
+  --nl-emerald:       #10B981;
+  --nl-rose:          #F43F5E;
+
+  /* Neutrals & Surfaces */
+  --nl-bg:            #070F1E;
+  --nl-surface:       #0F2341;
+  --nl-surface-glass: rgba(15, 35, 65, 0.65);
+  --nl-paper:         #F8FAFC;
+  --nl-paper-dim:     #E2E8F0;
+  --nl-ink:           #0F172A;
+  --nl-ink-soft:      #475569;
+  --nl-ink-light:     #94A3B8;
+  --nl-ink-faint:     #CBD5E1;
+  --nl-line:          rgba(15, 23, 42, 0.12);
+
+  /* Typography Fonts */
+  --nl-font-display:  'Outfit', system-ui, -apple-system, sans-serif;
+  --nl-font-body:     'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --nl-font-mono:     'JetBrains Mono', monospace;
+
+  /* Spacing Scale */
+  --nl-space-1: 4px;
+  --nl-space-2: 8px;
+  --nl-space-3: 16px;
+  --nl-space-4: 24px;
+  --nl-space-5: 40px;
+  --nl-space-6: 64px;
+  --nl-space-7: 96px;
+  --nl-space-8: 128px;
+
+  /* Radii */
+  --nl-radius-sm: 8px;
+  --nl-radius-md: 14px;
+  --nl-radius-lg: 24px;
+  --nl-radius-xl: 32px;
+  --nl-radius-full: 9999px;
+
+  /* Elevation Shadows & Glows */
+  --nl-shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.08);
+  --nl-shadow-md:    0 8px 24px rgba(7, 15, 30, 0.12);
+  --nl-shadow-lg:    0 16px 40px rgba(7, 15, 30, 0.2);
+  --nl-shadow-lift:  0 20px 50px rgba(15, 23, 42, 0.14);
+  --nl-shadow-glow-cyan: 0 0 30px rgba(14, 165, 233, 0.25);
+  --nl-shadow-glow-gold: 0 0 30px rgba(245, 158, 11, 0.25);
+
+  /* Transitions */
+  --nl-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --nl-transition: all 0.3s var(--nl-ease);
+  --nl-max-width: 1280px;
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.nl-theme {
+  margin: 0;
+  padding: 0;
+  background-color: var(--nl-paper);
+  color: var(--nl-ink);
+  font-family: var(--nl-font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.hidden { display: none !important; }
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+.nl-h1, .nl-h2, .nl-h3, .nl-h4 {
+  font-family: var(--nl-font-display);
+  font-weight: 600;
+  color: var(--nl-ink);
+  line-height: 1.2;
+  margin: 0;
+}
+.nl-h1 { font-size: 40px; font-weight: 700; }
+.nl-h2 { font-size: 26px; }
+.nl-h3 { font-size: 20px; }
+.nl-h4 { font-size: 16px; }
+
+.nl-body {
+  font-family: var(--nl-font-body);
+  font-size: 15px;
+  color: var(--nl-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.nl-link {
+  color: var(--nl-teal);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--nl-transition);
+}
+.nl-link:hover { color: var(--nl-navy); text-decoration: underline; }
+
+/* ==========================================================================
+   Brand / Logo
+   ========================================================================== */
+
+.brand-text-swap {
+  display: flex;
+  align-items: center;
+  font-family: var(--nl-font-display);
+  font-weight: 600;
+}
+.nl-orange-i { color: var(--nl-gold); }
+.white-text { color: #FFFFFF; }
+.dark-text { color: var(--nl-navy); }
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.nl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nl-space-2);
+  padding: 12px 20px;
+  border-radius: var(--nl-radius-full);
+  font-family: var(--nl-font-body);
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--nl-transition);
+  white-space: nowrap;
+}
+.nl-btn-primary {
+  background: linear-gradient(135deg, var(--nl-navy), var(--nl-teal));
+  color: #FFFFFF;
+}
+.nl-btn-primary:hover { transform: translateY(-1px); box-shadow: var(--nl-shadow-md); }
+.nl-btn-primary.loading { opacity: 0.75; pointer-events: none; }
+
+.nl-btn-outline {
+  background: #FFFFFF;
+  color: var(--nl-ink);
+  border: 1px solid var(--nl-line);
+}
+.nl-btn-outline:hover { background: var(--nl-paper-dim); }
+
+.nl-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--nl-ink-soft);
+  cursor: pointer;
+  transition: var(--nl-transition);
+}
+.nl-btn-icon:hover { background: var(--nl-paper-dim); color: var(--nl-ink); }
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+.nl-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nl-space-1);
+  margin-bottom: var(--nl-space-3);
+}
+
+.nl-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nl-ink-soft);
+}
+
+.nl-input, .nl-select {
+  width: 100%;
+  font-family: var(--nl-font-body);
+  font-size: 15px;
+  color: var(--nl-ink);
+  background: #FFFFFF;
+  border: 1px solid var(--nl-line);
+  border-radius: var(--nl-radius-sm);
+  padding: 10px 12px;
+  transition: var(--nl-transition);
+}
+.nl-input:focus, .nl-select:focus {
+  outline: none;
+  border-color: var(--nl-teal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nl-teal) 18%, transparent);
+}
+.nl-select { cursor: pointer; }
+
+.nl-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--nl-space-2);
+  font-size: 14px;
+  color: var(--nl-ink-soft);
+  cursor: pointer;
+  user-select: none;
+}
+.nl-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--nl-teal);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Alerts
+   ========================================================================== */
+
+.nl-alert {
+  display: flex;
+  gap: var(--nl-space-2);
+  padding: var(--nl-space-3);
+  border-radius: var(--nl-radius-sm);
+  font-size: 14px;
+  border: 1px solid var(--nl-line);
+}
+.nl-alert--info {
+  background: rgba(20, 184, 166, 0.08);
+  border-color: rgba(20, 184, 166, 0.3);
+  color: var(--nl-ink);
+}
+
+/* ==========================================================================
+   Modals
+   ========================================================================== */
+
+.nl-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--nl-space-4);
+  opacity: 0;
+  transition: opacity 0.25s var(--nl-ease);
+}
+.nl-modal-overlay.open { opacity: 1; }
+
+.nl-modal {
+  background: #FFFFFF;
+  border-radius: var(--nl-radius-lg);
+  box-shadow: var(--nl-shadow-lift);
+  width: 100%;
+  max-width: 440px;
+  padding: var(--nl-space-4);
+  transform: scale(0.96);
+  transition: transform 0.25s var(--nl-ease);
+}
+.nl-modal-overlay.open .nl-modal { transform: scale(1); }
+
+.nl-modal-title {
+  font-family: var(--nl-font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--nl-ink);
+  margin-bottom: var(--nl-space-2);
+}
+.nl-modal-body {
+  font-size: 14px;
+  color: var(--nl-ink-soft);
+  line-height: 1.6;
+  margin-bottom: var(--nl-space-4);
+}
+.nl-modal-actions {
+  display: flex;
+  gap: var(--nl-space-2);
+  justify-content: flex-end;
+}
+.nl-modal-actions .nl-btn { flex: 1; }

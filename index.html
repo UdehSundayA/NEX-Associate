@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NEX Associate v3.0 - The Teacher AI Assistant & Distribution Gateway Web Application for Nexus Learning.">
+  <title>NEX Associate v3.0 | Teacher AI Partner & Distribution Gateway</title>
+  <link rel="stylesheet" href="nexus-theme.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="nexus-theme nl-theme">
+
+  <!-- Header & Brand Navigation -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">NEX</div>
+      <div class="brand-info">
+        <h1>NEX Associate v3.0</h1>
+        <p>Nexus Learning • Teacher AI Partner & Distribution Gateway</p>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main Navigation">
+      <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-btn" data-tab="onboarding">Teacher Billing & Profile</button>
+      <button class="nav-btn" data-tab="gateway">Materials Distribution</button>
+      <button class="nav-btn" data-tab="orchestra">Subagent Orchestra (9 Leads)</button>
+      <button class="nav-btn" data-tab="feedback">Feedback Relay Portal</button>
+    </nav>
+
+    <div class="header-meta">
+      <div class="nexus-brand-badge">
+        <div class="pulse-dot"></div>
+        NEX ASSOCIATE GATEWAY ACTIVE
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1: DASHBOARD -->
+    <section id="pane-dashboard" class="section-pane active">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-label">Active Classes</span>
+          <span class="metric-value" style="color: var(--nexus-cyan);">15 Classes</span>
+          <span class="metric-subtitle">Primary 1-6 & SS 1-3 Active</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Students Reached</span>
+          <span class="metric-value" style="color: var(--nexus-orange);">1,240</span>
+          <span class="metric-subtitle">Across 3 Partner Schools</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Weekly Hours Saved</span>
+          <span class="metric-value" style="color: var(--nexus-emerald);">6.5 Hours</span>
+          <span class="metric-subtitle">Per Teacher / Week</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Active Subagent Workforce</span>
+          <span class="metric-value" style="color: var(--nexus-gold);">9 Leads</span>
+          <span class="metric-subtitle">27 Recruited Tier-3 Micro-Agents</span>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="glass-card-header">
+          <h2>👨‍🏫 NEX Associate — System Architecture & Role</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+          <strong>NEX Associate</strong> is the teacher-facing logistics, distribution, customer success, and delivery gateway for Nexus Learning. Operating as the distribution client, NEX Associate queries <strong style="color: var(--nexus-cyan);">NEX Curriculum</strong> (the backend content engine) to fetch ready-to-teach <strong>13-Section Lesson Plans</strong>, <strong>5-Step Blackboard Notes</strong>, <strong>Flashcards</strong>, and <strong>WAEC/IGCSE Test Kits</strong>.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+          <div style="background: rgba(10, 25, 47, 0.7); border: 1px solid var(--border-color); border-left: 3px solid var(--nexus-cyan); padding: 1rem; border-radius: 8px;">
+            <h4 style="color: var(--nexus-cyan); margin-bottom: 0.4rem;">1. PROFILE & BILLING</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Teacher selects Curriculum (NERDC/Cambridge/American), Class level, and Paid Subjects billed per-subject.</p>
+          </div>
+          <div style="background: rgba(10, 25, 47, 0.7); border: 1px solid var(--border-color); border-left: 3px solid var(--nexus-orange); padding: 1rem; border-radius: 8px;">
+            <h4 style="color: var(--nexus-orange); margin-bottom: 0.4rem;">2. QUERY & DISTRIBUTE</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Queries NEX Curriculum REST API to fetch manufactured kits and delivers via Dashboard, WhatsApp, and PDF/Word exports.</p>
+          </div>
+          <div style="background: rgba(10, 25, 47, 0.7); border: 1px solid var(--border-color); border-left: 3px solid var(--nexus-emerald); padding: 1rem; border-radius: 8px;">
+            <h4 style="color: var(--nexus-emerald); margin-bottom: 0.4rem;">3. FEEDBACK RELAY</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Forwards teacher comments to NEX Curriculum for updates, relaying resolution messages back to teachers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TEACHER BILLING & PROFILE PORTAL -->
+    <section id="pane-onboarding" class="section-pane">
+      <div class="glass-card">
+        <div class="glass-card-header">
+          <h2>💳 Teacher Profile & Per-Subject Subscription Billing</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          Teachers configure their <strong>Curriculum Framework</strong>, select their active <strong>Class Level</strong>, and choose the <strong>Subjects</strong> they teach. Teachers are billed transparently on a <strong>per-subject subscription model</strong> (₦1,500 / $3.00 per subject / month) with volume discounts.
+        </p>
+
+        <div class="playground-layout">
+          <div>
+            <div class="form-group">
+              <label for="tb-curriculum-select" style="color: var(--nexus-cyan); font-weight: 700;">1. Select Curriculum Framework:</label>
+              <select id="tb-curriculum-select" class="form-control" style="font-weight: 600;">
+                <option value="NERDC">📌 NERDC National Standard (Nigeria / WAEC / NECO / JAMB)</option>
+                <option value="CAMBRIDGE">📌 Cambridge International (British / IGCSE / Checkpoint)</option>
+                <option value="AMERICAN">📌 US Common Core State Standards (American / SAT)</option>
+                <option value="HARMONIZED">📌 Nexus Harmonized Multi-Curriculum (Hybrid International)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="tb-grade-select" style="color: var(--nexus-orange); font-weight: 700;">2. Select Active Class Level:</label>
+              <select id="tb-grade-select" class="form-control" style="font-weight: 600;">
+                <option value="SS2" selected>Senior Secondary 2 (SS 2 / IGCSE Year 11 / Grade 11)</option>
+                <option value="PRY1">Primary 1 (Pry 1 / Grade 1)</option>
+                <option value="PRY5">Primary 5 (Pry 5 / Grade 5)</option>
+                <option value="JSS2">Junior Secondary 2 (JSS 2 / Stage 8 / Grade 8)</option>
+                <option value="SS1">Senior Secondary 1 (SS 1 / IGCSE Year 10 / Grade 10)</option>
+                <option value="SS3">Senior Secondary 3 (SS 3 / A-Level / Grade 12)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label style="color: var(--nexus-emerald); font-weight: 700; margin-bottom: 0.5rem; display: block;">
+                3. Select Teaching Subjects (Per-Subject Billing):
+              </label>
+              <div id="tb-subject-checkboxes" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-height: 240px; overflow-y: auto; background: rgba(10, 25, 47, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <button class="btn-primary btn-orange" id="btn-activate-teacher-plan">Activate NEX Associate Teacher Profile</button>
+          </div>
+
+          <div>
+            <h3 style="color: var(--nexus-gold); margin-bottom: 1rem;">💳 Subscription Billing Summary</h3>
+            <div id="tb-billing-summary-card" style="background: rgba(10, 25, 47, 0.9); border: 1px solid var(--nexus-gold); padding: 1.5rem; border-radius: 10px;">
+              <!-- Dynamically populated calculation -->
+            </div>
+            
+            <div id="tb-activation-telemetry" class="code-box" style="margin-top: 1rem; height: 160px; font-size: 0.82rem;">
+              [System Ready: Select curriculum, class, and subjects to view real-time billing breakdown.]
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: MATERIALS DISTRIBUTION GATEWAY -->
+    <section id="pane-gateway" class="section-pane">
+      <div class="glass-card">
+        <div class="glass-card-header">
+          <h2>📦 Materials Query & Distribution Gateway</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          Query <strong>NEX Curriculum REST API</strong> to fetch manufactured 13-Section Lesson Plans, 5-Step Notebooks, Flashcards, and WAEC/IGCSE Test Question Papers.
+        </p>
+
+        <div class="playground-layout">
+          <div>
+            <div class="form-group">
+              <label for="gateway-subject-select" style="color: var(--nexus-cyan);">Select Paid Subject:</label>
+              <select id="gateway-subject-select" class="form-control">
+                <option value="MATHEMATICS">📐 Mathematics</option>
+                <option value="PHYSICS">⚡ Physics</option>
+                <option value="ENGLISH_STUDIES">✍️ English Studies</option>
+                <option value="CHEMISTRY">🧪 Chemistry</option>
+                <option value="BIOLOGY">🧬 Biology</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="gateway-topic-input" style="color: var(--nexus-orange);">Topic / Module Name:</label>
+              <input type="text" id="gateway-topic-input" class="form-control" value="Quadratic Equations & Parabolic Motion">
+            </div>
+
+            <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+              <button class="btn-primary btn-orange" id="btn-fetch-curriculum">Query NEX Curriculum API</button>
+              <button class="btn-primary btn-emerald" onclick="alert('Exporting PDF Lesson Pack...')">Export PDF</button>
+              <button class="btn-primary btn-cyan" onclick="alert('Sending WhatsApp Business Delivery...')">Deliver to WhatsApp</button>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="color: var(--nexus-cyan); margin-bottom: 0.8rem;">Received Materials Payload</h3>
+            <div class="code-box" id="curriculum-fetch-output" style="height: 300px;">
+              [Ready to query NEX Curriculum REST API endpoints...]
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: SUBAGENT ORCHESTRA (9 LEADS) -->
+    <section id="pane-orchestra" class="section-pane">
+      <div class="glass-card">
+        <div class="glass-card-header">
+          <h2>🤖 NEX Associate 9 Tier-2 Lead Agents & 27 Tier-3 Micro-Agents</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem;">
+          NEX Associate acts as the Tier-1 Orchestra Agent, training and managing <strong>9 Lead Agents</strong> and <strong>27 Tier-3 Micro-Agents</strong> across logistics, inspector compliance, indigenous languages (Hausa/Yoruba/Igbo/French/Swahili), teacher coaching, lesson planning, blackboard notes, exam rubrics, curriculum harmonization, and mathematical rigor.
+        </p>
+
+        <div id="organogram-agent-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem;">
+          <!-- Dynamically rendered -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: TEACHER FEEDBACK RELAY PORTAL -->
+    <section id="pane-feedback" class="section-pane">
+      <div class="glass-card">
+        <div class="glass-card-header">
+          <h2>💬 Teacher & School Feedback Forwarding & Relay Portal</h2>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          Submit feedback from teachers and school admins. NEX Associate forwards comments to <strong>NEX Curriculum</strong> (`POST /v1/feedback/submit`), where <strong>NEX Insight</strong> and <strong>NEX LessonSmith</strong> patch the curriculum vault and relay resolution responses back.
+        </p>
+
+        <div class="playground-layout">
+          <div>
+            <div class="form-group">
+              <label for="fb-subject-select">Subject Category:</label>
+              <select id="fb-subject-select" class="form-control">
+                <option value="PHYSICS">⚡ Physics</option>
+                <option value="MATHEMATICS">📐 Mathematics</option>
+                <option value="ENGLISH_STUDIES">✍️ English Studies</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fb-comment-text">Teacher / School Feedback Comment:</label>
+              <textarea id="fb-comment-text" class="form-control" rows="5" placeholder="Enter teacher feedback or requested curriculum refinement...">Requesting additional visual dual-coding diagrams for projectile motion trajectory equations in SS2 Physics.</textarea>
+            </div>
+
+            <button class="btn-primary btn-orange" id="btn-submit-feedback">Forward Feedback to NEX Curriculum</button>
+          </div>
+
+          <div>
+            <h3 style="color: var(--nexus-emerald); margin-bottom: 0.8rem;">Resolution Response Relay Feed</h3>
+            <div id="fb-relay-response-box">
+              <div class="code-box" style="height: 240px; color: var(--text-muted);">
+                [No active feedback submitted. Enter feedback comment to test forwarding and relay resolution.]
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>NEX Associate v3.0 &copy; 2026 <strong>Nexus Learning Inc.</strong> All rights reserved.</p>
+  </footer>
+
+  <script src="js/data/curriculum_data.js"></script>
+  <script src="js/engine/teacher_billing_engine.js"></script>
+  <script src="js/engine/agent_orchestrator.js"></script>
+  <script src="js/engine/api_client.js"></script>
+  <script src="js/ui/app.js"></script>
+</body>
+</html>
