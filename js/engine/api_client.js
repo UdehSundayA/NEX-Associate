@@ -1,12 +1,23 @@
 /**
  * NEX ASSOCIATE — API Connector & Supply-Chain Gateway Client
- * Handles querying NEX Curriculum REST API & Teacher Feedback Forwarding
+ *
+ * Previously this file held a hardcoded internal API key
+ * ("nexus-internal-dev-token") and called nex-curriculum's internal-only
+ * API straight from the browser — meaning that key was visible to anyone
+ * reading this file on GitHub or opening browser dev tools on the live
+ * page (the same exposure class found and fixed in NEX Quizzer earlier
+ * this session). It has been removed. This client now talks only to
+ * associate_proxy.py (see server/associate_proxy.py), which holds the real
+ * credentials server-side.
+ *
+ * Public method signatures (queryNexCurriculum, forwardTeacherFeedback) are
+ * unchanged so js/ui/app.js needs no changes — only what happens inside
+ * them changed.
  */
 
 class NexAssociateApiClient {
-  constructor(baseUrl = "http://localhost:3000") {
+  constructor(baseUrl = (window.NEX_ASSOCIATE_PROXY_BASE || "http://127.0.0.1:5002")) {
     this.baseUrl = baseUrl;
-    this.apiKey = "nexus-internal-dev-token"; // Matches INTERNAL_API_KEY in .env
     this.logs = [];
   }
 
@@ -20,18 +31,9 @@ class NexAssociateApiClient {
     return entry;
   }
 
-  /**
-   * Helper for authenticated API fetch
-   */
   async _fetch(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    const headers = {
-      "Content-Type": "application/json",
-      "x-internal-api-key": this.apiKey,
-      "x-internal-token": this.apiKey,
-      ...(options.headers || {})
-    };
-
+    const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
     const res = await fetch(url, { ...options, headers });
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({ error: res.statusText }));
@@ -41,7 +43,7 @@ class NexAssociateApiClient {
   }
 
   /**
-   * Primary Query Path: Fetch manufactured Lesson Plans, Notes, Flashcards & Tests from live NEX Curriculum
+   * Primary Query Path: Fetch manufactured Lesson Plans, Notes, Flashcards & Tests via the proxy.
    */
   async queryNexCurriculum(teacherProfile, topicRequest) {
     const subject = topicRequest.subject || "MATHEMATICS";
@@ -49,50 +51,19 @@ class NexAssociateApiClient {
     const standard = teacherProfile.curriculum || "NERDC";
     const topicSearch = topicRequest.topic || "Algebra";
 
-    this.log("QUERY_NEX_CURRICULUM_START", `Connecting to live backend (${this.baseUrl}) for ${subject} (${grade})...`);
+    this.log("QUERY_NEX_CURRICULUM_START", `Connecting to proxy (${this.baseUrl}) for ${subject} (${grade})...`);
 
     try {
-      // 1. Check for matching topic in live DB
-      let topicId = null;
-      let topicRecord = null;
+      const qs = new URLSearchParams({ subject, grade });
+      if (topicSearch) qs.set("topic", topicSearch);
+      const data = await this._fetch(`/api/v1/associate/kit?${qs.toString()}`);
 
-      try {
-        const topicsRes = await this._fetch(`/curriculum/topics?subject=${encodeURIComponent(subject)}&grade=${encodeURIComponent(grade)}`);
-        if (topicsRes.topics && topicsRes.topics.length > 0) {
-          // Find matching title or take first
-          const matched = topicsRes.topics.find(t => t.title.toLowerCase().includes(topicSearch.toLowerCase()));
-          topicRecord = matched || topicsRes.topics[0];
-          topicId = topicRecord.id;
-        }
-      } catch (err) {
-        console.warn("Topic discovery query failed:", err.message);
-      }
-
-      // If topic found in DB, request delivery of teacher package
-      if (topicId) {
-        this.log("TOPIC_RESOLVED", `Found curriculum topic in DB: "${topicRecord.title}" (ID: ${topicId})`);
-
-        // Ensure content is generated
-        try {
-          await this._fetch('/curriculum/content', {
-            method: 'POST',
-            body: JSON.stringify({ topicId })
-          });
-        } catch (e) {
-          console.warn("Content pre-fetch note:", e.message);
-        }
-
-        // Deliver teacher package
-        const deliveryRes = await this._fetch('/curriculum/deliver', {
-          method: 'POST',
-          body: JSON.stringify({ topicId, target: 'associate' })
-        });
-
-        this.log("QUERY_NEX_CURRICULUM_SUCCESS", `Successfully delivered live teacher package for "${topicRecord.title}" from NEX Curriculum!`);
+      if (data.materials && data.topic) {
+        this.log("QUERY_NEX_CURRICULUM_SUCCESS", `Successfully delivered live teacher package for "${data.topic.title}" from NEX Curriculum!`);
 
         const kit = {
           meta: {
-            kit_id: `LIVE_${subject}_${grade}_${topicId.slice(0, 6)}`,
+            kit_id: `LIVE_${subject}_${grade}_${data.topic.id.slice(0, 6)}`,
             clientId: "NEX_ASSOCIATE",
             formatSelected: "NERDC_WAEC_STANDARD",
             formatName: "NERDC / WAEC Standard Inspection Format",
@@ -100,22 +71,22 @@ class NexAssociateApiClient {
             generatedAt: new Date().toISOString(),
             isLive: true
           },
-          lessonPlan: deliveryRes.materials?.lessonPlan || {
-            title: `Lesson Plan: ${topicRecord.title}`,
+          lessonPlan: data.materials.lessonPlan || {
+            title: `Lesson Plan: ${data.topic.title}`,
             class: grade,
             duration: "80 Minutes (Double Period)",
             curriculum: standard,
             sectionsCount: 13,
             status: "APPROVED_BY_NEX_CURRICULUM_LIVE"
           },
-          noteOfLesson: deliveryRes.materials?.teachingNotes || {
-            title: `Teacher Chalkboard Notes: ${topicRecord.title}`,
+          noteOfLesson: data.materials.teachingNotes || {
+            title: `Teacher Chalkboard Notes: ${data.topic.title}`,
             format: "5-Step Traditional Chalkboard Note",
             hasBoardSummary: true
           },
           flashcards: {
             deckSize: 12,
-            title: `Key Concepts Deck: ${topicRecord.title}`
+            title: `Key Concepts Deck: ${data.topic.title}`
           },
           assessmentKit: {
             mcqCount: 10,
@@ -127,14 +98,13 @@ class NexAssociateApiClient {
         return { status: 200, kit, logTrace: this.logs[0] };
       }
 
-      // If no pre-seeded topic matched or DB is empty, use resilient structured payload
-      this.log("BACKEND_ACCESSED", `Backend reached; preparing structured fallback kit for requested topic "${topicSearch}".`);
-
+      this.log("BACKEND_ACCESSED", `Proxy reached; no matching topic yet for "${topicSearch}" — preparing structured fallback kit.`);
     } catch (networkError) {
-      this.log("BACKEND_FALLBACK", `Live backend connection notice (${networkError.message}). Activating local resilient synthesizer.`);
+      this.log("BACKEND_FALLBACK", `Proxy connection notice (${networkError.message}). Activating local resilient synthesizer.`);
     }
 
-    // Resilient local synthesis fallback
+    // Resilient local synthesis fallback — unchanged from before, this part
+    // was never the security issue.
     const kit = {
       meta: {
         kit_id: `KIT_${subject}_${grade}_W${topicRequest.week || 4}_${Date.now().toString().slice(-4)}`,
@@ -177,31 +147,24 @@ class NexAssociateApiClient {
   }
 
   /**
-   * Forward Teacher / School Feedback to NEX Care Agent on Live Backend
+   * Forward Teacher / School Feedback via the proxy.
    */
   async forwardTeacherFeedback(feedbackPayload) {
-    this.log("FEEDBACK_FORWARD_START", `Transmitting teacher feedback for ${feedbackPayload.subject} to NEX Care backend...`);
+    this.log("FEEDBACK_FORWARD_START", `Transmitting teacher feedback for ${feedbackPayload.subject} via proxy...`);
 
     try {
-      // 1. Create ticket in NEX Care
-      const ticketRes = await this._fetch('/care/tickets', {
+      const res = await this._fetch('/api/v1/associate/feedback', {
         method: 'POST',
-        body: JSON.stringify({ userId: 'teacher_portal_associate' })
+        body: JSON.stringify(feedbackPayload)
       });
 
-      const ticketId = ticketRes.ticket?.id || `TICKET_FB_${Date.now().toString().slice(-6)}`;
+      if (!res.success) throw new Error(res.error || "Proxy reported failure");
 
-      // 2. Send feedback message to NEX Care agent
-      const messageRes = await this._fetch(`/care/tickets/${ticketId}/messages`, {
-        method: 'POST',
-        body: JSON.stringify({ content: `[NEX Associate Feedback - ${feedbackPayload.subject} (${feedbackPayload.class})]: ${feedbackPayload.comment}` })
-      });
-
-      const careReply = messageRes.response;
+      const careReply = res.response;
       const actionTaken = careReply?.resolution || careReply?.reasoning || `NEX Care evaluated feedback for [${feedbackPayload.subject} - ${feedbackPayload.class}]. Category: ${careReply?.category || 'Content Feedback'}. Status: ${careReply?.status || 'RESOLVED'}.`;
 
       const resolutionResponse = {
-        ticket_id: ticketId,
+        ticket_id: res.ticket_id,
         status: careReply?.status || "RESOLVED_AND_PATCHED",
         subject: feedbackPayload.subject,
         class: feedbackPayload.class,
@@ -212,11 +175,11 @@ class NexAssociateApiClient {
         relayMessageForTeacher: careReply?.replyText || `Dear Teacher/School, NEX Care has reviewed your feedback regarding [${feedbackPayload.subject} - ${feedbackPayload.class}]. Category: ${careReply?.category || 'Content Feedback'}. Action: ${actionTaken}`
       };
 
-      this.log("FEEDBACK_RELAY_RECEIVED", `Received resolution ticket [${ticketId}] from live NEX Care agent.`);
+      this.log("FEEDBACK_RELAY_RECEIVED", `Received resolution ticket [${res.ticket_id}] from live NEX Care agent.`);
       return resolutionResponse;
 
     } catch (err) {
-      this.log("FEEDBACK_FALLBACK", `Backend Care agent notice (${err.message}). Using local feedback relay.`);
+      this.log("FEEDBACK_FALLBACK", `Proxy/Care agent notice (${err.message}). Using local feedback relay.`);
 
       const ticketId = `TICKET_FB_${Date.now().toString().slice(-6)}`;
       const actionTaken = `NEX Curriculum (NEX LessonSmith & NEX Insight) analyzed feedback for [${feedbackPayload.subject} - ${feedbackPayload.class}]. Applied pedagogical refinement to concept node definition.`;
